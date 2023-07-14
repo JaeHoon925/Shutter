@@ -7,20 +7,22 @@
             <v-col>
               <v-form style="width: 100%; height: 300px">
                 <div class="mx-3">
-                  Email
+                  이메일
                   <div class="mx-1">
-                    <v-text-field placeholder="Email" required v-model="email"></v-text-field>
+                    <v-text-field placeholder="이메일" required v-model="email"></v-text-field>
                   </div>
                 </div>
                 <div class="mx-3">
-                  Password
+                  비밀번호
                   <div class="mx-1">
-                    <v-text-field placeholder="Password" type="password" required v-model="pw"></v-text-field>
+                    <v-text-field placeholder="비밀번호" type="password" required v-model="pw"></v-text-field>
+                    <v-spacer>
+                    <v-icon>mdi-eye</v-icon>
                   </div>
                 </div>
 
                 <v-card-actions>
-                  <v-btn color="#2c4f91" dark large block v-on:click="login">Login</v-btn>
+                  <v-btn color="#2c4f91" dark large block v-on:click="login">로그인</v-btn>
                 </v-card-actions>
               </v-form>
             </v-col>
@@ -57,11 +59,6 @@ export default {
               const currentUser = firebase.auth().currentUser;
               self.changeEmail(currentUser.email)
               self.$router.replace('/');
-              // if (currentUser) {
-              //   const email = currentUser.email;
-              //   console.log('사용자 이메일:', email);
-              // }
-              // console.log('로그인 상태:', user);
               return;
             }
             // 사용자 로그아웃 시 동작
@@ -69,7 +66,11 @@ export default {
           });
         },
         function (err) {
-          alert('에러 : ' + err.message)
+          if (err.code === 'auth/invalid-email' || err.code === 'auth/user-not-found') {
+            alert('이메일이 없거나 비밀번호가 틀렸습니다.');
+          } else {
+            alert('에러: ' + err.message);
+          }
         }
       );
 

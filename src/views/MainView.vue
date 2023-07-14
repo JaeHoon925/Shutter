@@ -12,6 +12,7 @@
     </div>
     <div class="mx-auto techniqueBox">
       <h2>촬영 기법</h2>
+      <div style="position: relative; padding-bottom: 60px;">
       <v-layout row wrap justify-center relative class="mt-3">
         <v-card xs12 sm6 md4 xl4 class="mr-6 ml-6 mb-6" width="33.3%" max-width="300" min-width="230">
           <v-img src="../assets/images/반영.jpeg" height="250"></v-img>
@@ -55,8 +56,18 @@
             </p>
           </v-card-text>
         </v-card>
-          <v-btn absolute bottom><router-link to="technique" style="text-decoration: none; color: #000">더 알아보기</router-link></v-btn>
+        <v-btn absolute bottom><router-link to="technique" style="text-decoration: none; color: #000">더 알아보기</router-link></v-btn>
       </v-layout>
+    </div>
+
+      <v-card>
+      <v-card-title>추천 & 질문 게시판</v-card-title>
+      <v-data-table :headers="headers" :items="items">
+      </v-data-table>
+      <v-dialog max-width="500" v-model="dialog">
+        
+      </v-dialog>
+    </v-card>
     </div>
     <div class="boardBox">
 
@@ -68,10 +79,88 @@
 import { mapState } from 'vuex';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
 
 export default {
   name: 'HomeView',
-
+  data() {
+    return {
+      headers: [
+        { value: 'title', text: '제목' },
+        { value: 'content', text: '내용' },
+        { value: 'email', text: '작성자' },
+        { value: 'id', text: '' }
+      ],
+      items: [],
+      form: {
+        title: '',
+        content: '',
+        email: '',
+      },
+      dialog: false,
+      selectedItem: null
+    }
+  },
+  created() {
+    this.read()
+  },
+  methods: {
+    openDialog(item) {
+      if(!this.isLoggedIn) {
+        alert('로그인이 필요한 서비스입니다.');
+        return
+      }
+      this.selectedItem = item
+      this.dialog = true
+      if (!item) {
+        this.form.title = ''
+        this.form.content = ''
+        this.form.email = this.userEmail
+      } else {
+        this.form.title = item.title
+        this.form.content = item.content
+        this.form.email = item.email
+      }
+    },
+    add() {
+      const db = firebase.firestore();
+      db.collection('boards').add(this.form)
+      this.dialog = false
+      this.read()
+    },
+    update() {
+      const db = firebase.firestore();
+      db.collection('boards').doc(this.selectedItem.id).update(this.form)
+      this.dialog = false
+      this.read()
+    },
+    async read() {
+      const db = firebase.firestore();
+      const sn = await db.collection('boards').get()
+      if (!sn.empty) {
+        this.items = sn.docs.map(v => {
+          const item = v.data()
+          return {
+            title: item.title,
+            content: item.content,
+            email: item.email
+          }
+        })
+      }
+    },
+    remove(item) {
+      const db = firebase.firestore();
+      db.collection('boards').doc(item.id).delete()
+      this.dialog = false
+      this.read()
+    }
+  },
+  computed: {
+    ...mapState({
+      isLoggedIn: state => state.isLoggedIn,
+      userEmail: state => state.userEmail
+    })
+  }
 }
 </script>
 
@@ -105,7 +194,6 @@ export default {
 .techniqueBox {
   width: 100%;
   text-align: center;
-  padding-bottom: 60px;
 }
 
 .techniqueBox>h2 {

@@ -10,14 +10,13 @@ import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCd2NzjeRvGrgxHDn390Sf4tcCLYtAYsuI",
-  authDomain: "shutter-848c6.firebaseapp.com",
-  databaseURL: "https://shutter-848c6-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "shutter-848c6",
-  storageBucket: "shutter-848c6.appspot.com",
-  messagingSenderId: "5713652290",
-  appId: "1:5713652290:web:0111e35ef1856c3f4c9bdb",
-  measurementId: "G-3NNH81L3PS"
+  apiKey: "AIzaSyA4pkG0mtVQ8QQAPgsJz8EBz762q8QCljc",
+  authDomain: "shutter-750b6.firebaseapp.com",
+  projectId: "shutter-750b6",
+  storageBucket: "shutter-750b6.appspot.com",
+  messagingSenderId: "1071054973584",
+  appId: "1:1071054973584:web:bf0a43c4359621e3e30615",
+  measurementId: "G-GSPJQ7LJHV"
 };
 firebase.initializeApp(firebaseConfig);
 

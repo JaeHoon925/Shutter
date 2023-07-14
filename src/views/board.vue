@@ -1,9 +1,9 @@
 <template>
   <div id="board">
     <v-card>
-      <v-card-title>board</v-card-title>
+      <v-card-title>추천 & 질문 게시판</v-card-title>
       <v-data-table :headers="headers" :items="items">
-        <template>
+        <template v-slot:item.id="{ item }">
           <v-btn icon @click="openDialog(item)"><v-icon>mdi-pencil</v-icon></v-btn>
           <v-btn icon @click="remove(item)"><v-icon>mdi-delete</v-icon></v-btn>
         </template>
@@ -21,8 +21,8 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn @click="update" v-if="selectedItem">save</v-btn>
-              <v-btn @click="add" v-else>save</v-btn>
+              <v-btn @click="update" v-if="selectedItem">수정 완료</v-btn>
+              <v-btn @click="add" v-else>저장하기</v-btn>
             </v-card-actions>
           </v-form>
         </v-card>
@@ -43,12 +43,14 @@ export default {
       headers: [
         { value: 'title', text: '제목' },
         { value: 'content', text: '내용' },
-        { value: 'id', text: 'id' }
+        { value: 'email', text: '작성자' },
+        { value: 'id', text: '' }
       ],
       items: [],
       form: {
         title: '',
-        content: ''
+        content: '',
+        email: '',
       },
       dialog: false,
       selectedItem: null
@@ -59,14 +61,20 @@ export default {
   },
   methods: {
     openDialog(item) {
+      if(!this.isLoggedIn) {
+        alert('로그인이 필요한 서비스입니다.');
+        return
+      }
       this.selectedItem = item
       this.dialog = true
       if (!item) {
         this.form.title = ''
         this.form.content = ''
+        this.form.email = this.userEmail
       } else {
         this.form.title = item.title
         this.form.content = item.content
+        this.form.email = item.email
       }
     },
     add() {
@@ -90,20 +98,30 @@ export default {
           return {
             id: v.id,
             title: item.title,
-            content: item.content
+            content: item.content,
+            email: item.email
           }
         })
       }
     },
     remove(item) {
-      const db = firebase.firestore();
+      if(this.userEmail==item.email || this.userEmail=='admin2@naver.com') {
+        const db = firebase.firestore();
       db.collection('boards').doc(item.id).delete()
       this.dialog = false
       this.read()
+      } else if(this.userEmail == '') {
+        alert('로그인 이후에 가능한 서비스입니다.');
+      } else {
+        alert('작성자가 일치하지 않습니다');
+      }
     }
   },
   computed: {
-    ...mapState(['isLoggedIn']) // Vuex의 state를 컴포넌트의 computed 속성에 매핑
+    ...mapState({
+      isLoggedIn: state => state.isLoggedIn,
+      userEmail: state => state.userEmail
+    })
   }
 };
 </script>

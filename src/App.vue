@@ -7,10 +7,10 @@
         <router-link style="text-decoration: none; color: #fff;" to="/">Shutter</router-link>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <router-link v-show="!isLoggedIn" to="login"><v-btn>login</v-btn></router-link>
-      <router-link v-show="!isLoggedIn" to="signUp"><v-btn class="ml-2">sign up</v-btn></router-link>
+      <router-link v-show="!isLoggedIn" to="login"><v-btn>로그인</v-btn></router-link>
+      <router-link v-show="!isLoggedIn" to="signUp"><v-btn class="ml-2">회원가입</v-btn></router-link>
       <strong v-show="isLoggedIn" class="white--text">{{ $store.state.userEmail }}</strong>
-      <v-btn v-show="isLoggedIn" v-on:click="logout" class="ml-2">logout</v-btn>
+      <v-btn v-show="isLoggedIn" v-on:click="logout" class="ml-2">로그아웃</v-btn>
     </v-app-bar>
 
     <v-navigation-drawer app temporary v-model="navDrawer" color="#999999" dark>

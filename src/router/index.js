@@ -4,8 +4,9 @@ import MainView from '../views/MainView.vue'
 import login from '../views/login.vue'
 import signUp from '../views/signUp.vue'
 import board from '../views/board.vue'
-import test from '../views/test.vue'
+import thumbUp from '../views/thumbUp.vue'
 import technique from '../views/technique.vue'
+import test from '../views/test.vue'
 
 Vue.use(VueRouter)
 
@@ -36,6 +37,11 @@ const routes = [
     component: technique
   },
   {
+    path: '/thumbUp',
+    name: 'thumbUp',
+    component: thumbUp
+  },
+  {
     path: '/test',
     name: 'test',
     component: test
@@ -45,7 +51,10 @@ const routes = [
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
-  routes
+  routes,
+  scrollBehavior(to, from, savedPosition) {
+    return { x: 0, y: 0 }
+  }
 })
 
 export default router

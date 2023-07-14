@@ -2,7 +2,7 @@
     <div id="technique">
         <div class="mx-auto techniqueBox">
             <h2>촬영 기법</h2>
-            <v-layout row wrap justify-center class="mt-3">
+            <v-layout row wrap justify-center class="mt-7">
                 <v-card xs12 sm6 md4 xl4 class="mr-6 ml-6 mb-6" width="33.3%" max-width="300" min-width="230">
                     <v-img src="../assets/images/반영.jpeg" height="250"></v-img>
                     <v-card-title>
