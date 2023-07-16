@@ -16,8 +16,6 @@
                   비밀번호
                   <div class="mx-1">
                     <v-text-field placeholder="비밀번호" type="password" required v-model="pw"></v-text-field>
-                    <v-spacer>
-                    <v-icon>mdi-eye</v-icon>
                   </div>
                 </div>
 
